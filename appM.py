@@ -2,72 +2,77 @@ import hashlib
 import unicodedata
 import requests
 import streamlit as st
+import base64
+import os
 
 # Configuración de página
 st.set_page_config(page_title="El Desafío de las Puertas", page_icon="🏰", layout="centered")
 
-# CSS Personalizado para estilo Medieval/Místico/Pixel-Art
-st.markdown("""
+# Función para cargar imagen local como fondo
+def get_base64_of_bin_file(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+# Cambia 'fondo.jpg' por el nombre de tu archivo de imagen en GitHub
+nombre_archivo = "ima/Torre.jpg" 
+
+b64_string = ""
+if os.path.exists(nombre_archivo):
+    b64_string = get_base64_of_bin_file(nombre_archivo)
+
+# CSS Avanzado con Imagen de Fondo Local
+st.markdown(f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
-    .main {
-        background-color: #0b0d17;
-        background-image: linear-gradient(180deg, #0b0d17 0%, #1a1c2c 100%);
+    .stApp {{
+        background-image: url("data:image/png;base64,{b64_string}");
+        background-attachment: fixed;
+        background-size: cover;
+    }}
+
+    .main {{
+        background: rgba(11, 13, 23, 0.8);
         color: #e0d5b0;
         font-family: 'VT323', monospace;
-    }
+        padding: 20px;
+        border-radius: 15px;
+    }}
     
-    h1 {
+    h1 {{
         color: #d4af37 !important;
-        text-shadow: 2px 2px #5d4037;
+        text-shadow: 3px 3px #000000;
         text-align: center;
-        font-size: 4em !important;
-    }
+        font-size: 3.5em !important;
+    }}
 
-    .stMetric {
-        background: rgba(44, 44, 84, 0.8);
-        border: 2px solid #d4af37;
+    .stMetric {{
+        background: rgba(26, 28, 44, 0.9) !important;
+        border: 2px solid #d4af37 !important;
         border-radius: 10px;
-        padding: 10px;
-        box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-    }
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    }}
 
-    label[data-testid="stMetricLabel"] {
+    label[data-testid=\"stMetricLabel\"] {{
         color: #d4af37 !important;
         font-size: 1.5em !important;
-    }
+    }}
 
-    div[data-testid="stMetricValue"] {
-        color: #ffffff !important;
-        font-size: 1.2em !important;
-    }
-
-    .stButton>button {
+    .stButton>button {{
         background-color: #4a148c;
         color: #d4af37;
         border: 2px solid #d4af37;
         font-family: 'VT323', monospace;
         font-size: 1.5em;
-        transition: 0.3s;
         width: 100%;
-    }
+    }}
 
-    .stButton>button:hover {
-        background-color: #d4af37;
-        color: #4a148c;
-    }
-
-    .stTextInput>div>div>input {
-        background-color: #1a1c2c;
+    .stTextInput>div>div>input {{
+        background-color: #0b0d17;
         color: #e0d5b0;
         border: 1px solid #d4af37;
-        font-family: 'VT323', monospace;
-    }
-
-    hr {
-        border: 1px solid #d4af37;
-    }
+    }}
     </style>
     """, unsafe_allow_html=True)
 
@@ -86,7 +91,7 @@ MENSAJES = [
 "Sea usted bienvenida al podcast, ay! cuantas risas nos trajo esas sesiones de grabación, ¿verdad?. vas por el 60%",
 "¡Hola! Ya tienes un 70%, ya casi🤩",
 "🎶Bajo del mar, bajo del mar🎶🦀. ya tenemos un 80%",
-"Este debía de ser más difícil😼, o creíste que todas serian color de rosa, no, no, no🙂‍↔️. Ya casi terminas un ultimo esfuerzo💪🏻",
+"Este debía de ser más difícil😼, o creíste que todas serian color de rosa, no, no, no🙂‍↔️. Ya casi terminas un ultimo esfuerzo💪🏻!",
 "¿¡Enserio lo recordaste😶!?"
 ]
 FINAL = "¡Lo Lograste!🎉🥳🎉, muy biennnnnn"
@@ -108,16 +113,10 @@ if "ultima_puerta" not in st.session_state:
     st.session_state.ultima_puerta = -1
 
 st.title("🏰 EL MISTERIO DE LAS 10 PUERTAS 🏰")
-st.markdown("<p style='text-align: center; color: #e0d5b0;'>Descifra las runas para ascender la torre...</p>", unsafe_allow_html=True)
-st.markdown("--- observera el progreso ---")
 
 if all(st.session_state.puertas):
     st.balloons()
     st.success(FINAL)
-    if st.button("¿Volver a jugar?"):
-        st.session_state.puertas = [False] * 10
-        st.session_state.ultimo_mensaje = None
-        st.rerun()
 else:
     cols = st.columns(2)
     for i, abierta in enumerate(st.session_state.puertas):
@@ -127,9 +126,9 @@ else:
                 st.info(st.session_state.ultimo_mensaje)
 
     st.write(" ")
-    clave = st.text_input("Introduce clave:", placeholder="...", key="input_clave")
+    clave = st.text_input("Introduce la palabra de poder:", placeholder="...", key="input_clave")
     
-    if st.button("Abrir Puerta"):
+    if st.button("Conjurar Apertura"):
         n = normalizar(clave)
         h = hashlib.sha256(("kCiyNtw4VH9RhI9t" + n).encode()).hexdigest()
         encontrada = False
