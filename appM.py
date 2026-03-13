@@ -8,27 +8,33 @@ import json
 
 st.set_page_config(page_title="El Desafío de las Puertas", page_icon="🏰", layout="centered")
 
-def get_base64_of_bin_file(bin_file):
-    try:
-        if os.path.exists(bin_file):
-            with open(bin_file, 'rb') as f:
-                data = f.read()
-            return base64.b64encode(data).decode()
-    except: pass
-    return ""
+def get_base64(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as f:
+            data = f.read()
+        return base64.b64encode(data).decode()
+    return None
 
-nombre_archivo_fondo = "ima/Torre.jpg"
-b64_fondo = get_base64_of_bin_file(nombre_archivo_fondo)
+# Cargar imágenes principales
+b64_fondo = get_base64("ima/Torre.jpg")
+b64_tesoro = get_base64("ima/Ctesoro.jpg")
+b64_vacio = get_base64("ima/Cvacio.jpg")
+
+# CSS
+style_fondo = f"url(data:image/jpeg;base64,{b64_fondo})" if b64_fondo else "#0b0d17"
+style_tesoro = f"url(data:image/jpeg;base64,{b64_tesoro})" if b64_tesoro else "none"
+style_vacio = f"url(data:image/jpeg;base64,{b64_vacio})" if b64_vacio else "none"
 
 st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=VT323&family=Great+Vibes&display=swap');
-.stApp {{ background-image: url(\"data:image/png;base64,{b64_fondo}\"); background-attachment: fixed; background-size: cover; }}
-.main {{ background: rgba(11, 13, 23, 0.8); color: #ffd700; font-family: 'VT323', monospace; font-weight: bold; padding: 20px; border-radius: 15px; }}
+.stApp {{ background-image: {style_fondo}; background-attachment: fixed; background-size: cover; }}
+.main {{ background: rgba(11, 13, 23, 0.85); color: #ffd700; font-family: 'VT323', monospace; padding: 20px; border-radius: 15px; }}
 h1 {{ color: #d4af37 !important; text-shadow: 3px 3px #000000; text-align: center; font-size: 4em !important; font-family: 'Great Vibes', cursive; }}
 .stMetric {{ background: rgba(26, 28, 44, 0.95) !important; border: 6px solid #5c3a21 !important; border-radius: 15px; padding: 10px; box-shadow: 0 0 0 3px #3b2414, 0 0 15px rgba(0,0,0,0.7); }}
 .stButton>button {{ background-color: #4a148c; color: #d4af37; border: 2px solid #d4af37; font-family: 'VT323', monospace; font-size: 1.5em; width: 100%; }}
-.reward-box {{ background: rgba(0,0,0,0.9); border: 3px double #d4af37; padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 20px; }}
+.reward-box-prize {{ background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), {style_tesoro}; background-size: cover; border: 4px double #d4af37; padding: 30px; border-radius: 20px; text-align: center; }}
+.reward-box-empty {{ background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), {style_vacio}; background-size: cover; border: 4px double #808080; padding: 30px; border-radius: 20px; text-align: center; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -36,81 +42,71 @@ TOKEN = "8798116628:AAGWyZmKj3SUyb0Eux1_uWYbPgVDpDtrShI"
 CHAT_ID = 7177023901
 SALT = "kCiyNtw4VH9RhI9t"
 HASHES = ["c88fb2d67a9e16ea2d36d4526cba48c0c08a337bafc7c5e851ec16883f03dbb3", "be56a7feb47e0996c71cc9ebe8fc2b1c99340e4911dfa7b0e3131bb36c10eeb9", "df415e7b7c62c85bc9dd3578f73eebc5c44c4d488d067ce2cc6345d457096bf4", "89121310a34aec298d2d35e9b2d6f11fd6cf620300ee8813a733dae477f4935a", "98a69fdd719b9a5500d8bdcfe965cc18e566c7e26dfb3f631c67dce657b02ae7", "63706a2b1ade3088d19a2ee5b92b173c372c5b04a54928d68390881dbd447f4b", "606088e02b3b65cceedb34d7fe960b409c910ee5452505e16ff25072f832d58b", "7419baafe64f43b3e14d8e0068c2048855f7b5b5209cfa9cb36c9756e34469c4", "966099cd834ed37eb03aeeede0688c19d0546b42f0e48bb1b09a3714fe9e47ae", "8839c479607aed6292190ab7dc1e5bc70009c6c189550e28563ad1ed19046173"]
-MENSAJES = ["Bala la, la, la, ¡muy bien! primera puerta, tienes el 10%. Podrás con el resto🤔?", "Te contare una historia... pero aun falta, llevas un 20% Si se puede! Si se puede!", "Maitsev. Sul on 30%😲", "Que sabia era santa clara, ¿no? vas un 40%🥳", "Que buena respuesta😑, jajajajaja. Toda una filosofa usted. vas por la mitad 🎉 que veloz", "Sea usted bienvenida al podcast, ay! cuantas risas nos trajo esas sesiones de grabación, ¿verdad?. vas por el 60%", "¡Hola! Ya tienes un 70%, ya casi🤩", "🎶Bajo del mar, bajo del mar🎶🦀. ya tenemos un 80%", "Este debía de ser más difícil😼, o creíste que todas serian color de rosa, no, no, no🙂‍↔️. Ya casi terminas un ultimo esfuerzo💪🏻!", "¿¡Enserio lo recordaste😶!?"]
-
+MENSAJES = [ "Bala la, la, la, ¡muy bien! primera puerta, tienes el 10%. Podrás con el resto🤔?"
+, "Te contare una historia... pero aun falta, llevas un 20% Si se puede! Si se puede!", "Maitsev. Sul on 30%😲"
+, "Que sabia era santa clara, ¿no? vas un 40%🥳",  "Que buena respuesta😑, jajajajaja. Toda una filosofa usted. vas por la mitad 🎉 que veloz"
+, "Sea usted bienvenida al podcast, ay! cuantas risas nos trajo esas sesiones de grabación, ¿verdad?. vas por el 60%"
+, "¡Hola! Ya tienes un 70%, ya casi🤩", "🎶Bajo del mar, bajo del mar🎶🦀. ya tenemos un 80%"
+, "Este debía de ser más difícil😼, o creíste que todas serian color de rosa, no, no, no🙂‍↔️. Ya casi terminas un ultimo esfuerzo💪🏻", "¿¡Enserio lo recordaste😶!?"]
 RECOMPENSAS = [
     {"tipo": "video", "contenido": "ima/Bala_la_la.mp4"},
-    {"tipo": "texto", "contenido": "📜 te has ganado unos chicles🌀: S8o9IS"},
-    {"tipo": "none", "contenido": "💨 Esta puerta contenía una suabe brisa🍃... tal vez a la proxima"},
-    {"tipo": "texto", "contenido": "📜 puedes pedir una pista escribe: H3LP M3"},
-    {"tipo": "none", "contenido": "🔔 La vela se apagó. Aquí no hay nada.😝"},
+    {"tipo": "texto", "contenido": "📜 te ganaste unos chicles: S8o9IS"},
+    {"tipo": "none", "contenido": "💨 Una brisa suave🍃"},
+    {"tipo": "texto", "contenido": "📜 puedes obtener pista: H3LP M3"},
+    {"tipo": "none", "contenido": "se apago la vela🕯️, suerte para la proxima"},
     {"tipo": "imagen", "contenido": "ima/Inui.jpg"},
-    {"tipo": "none", "contenido": "🕷️ Solo telarañas... Sigue intentando."},
-    {"tipo": "texto", "contenido": "📜 te ganaste un chocolate🍫"},
-    {"tipo": "texto", "contenido": "📜 puedes reclamar una parte de la historia"},
+    {"tipo": "none", "contenido": "Aqui solo hay telarañas🕸️ y arañas🕷️."},
+    {"tipo": "texto", "contenido": "📜 puedes pedri un chocolate🍫"},
+    {"tipo": "texto", "contenido": "📜 Te ganaste otrs chicle: r4h83gh"},
     {"tipo": "imagen", "contenido": "ima/Invi.jpg"}
 ]
 
 def normalizar(txt): return "".join(c for c in unicodedata.normalize("NFD", txt.lower()) if unicodedata.category(c) != "Mn").strip()
-def notificar(texto):
-    try: requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", data={"chat_id": CHAT_ID, "text": texto})
-    except: pass
-def obtener_archivo_usuario(u): return f"{normalizar(u)}_progreso.json"
-def guardar_progreso(u, p):
-    with open(obtener_archivo_usuario(u), "w") as f: json.dump(p, f)
-def cargar_progreso(u):
-    r = obtener_archivo_usuario(u)
-    if os.path.exists(r):
-        with open(r, "r") as f: return json.load(f)
-    return [False] * 10
+def notificar(t): requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", data={"chat_id": CHAT_ID, "text": t})
+def obtener_ruta(u): return f"{normalizar(u)}_prog.json"
 
 if "usuario" not in st.session_state: st.session_state.usuario = ""
-if "mostrar_recompensa" not in st.session_state: st.session_state.mostrar_recompensa = -1
+if "mostrar_rec" not in st.session_state: st.session_state.mostrar_rec = -1
 if "reclamado" not in st.session_state: st.session_state.reclamado = False
 
 if not st.session_state.usuario:
-    st.title("🔐 IDENTIFÍCATE, ¿CÓMO SE LLAMA DAMA?")
-    nombre = st.text_input("¿Cuál es tu nombre?")
+    st.title("🔐 IDENTIFICACIÓN")
+    nombre = st.text_input("Nombre:")
     if st.button("Entrar"):
-        if nombre:
+        if nombre: 
             st.session_state.usuario = nombre
-            st.session_state.puertas = cargar_progreso(nombre)
+            path = obtener_ruta(nombre)
+            st.session_state.puertas = json.load(open(path)) if os.path.exists(path) else [False]*10
             st.rerun()
 else:
-    if st.session_state.mostrar_recompensa != -1:
-        idx = st.session_state.mostrar_recompensa
-        st.markdown(f"<div class='reward-box'><h1>🚪 PUERTA {idx+1}</h1><p style='font-size:1.5em;'>{MENSAJES[idx]}</p></div>", unsafe_allow_html=True)
+    if st.session_state.mostrar_rec != -1:
+        idx = st.session_state.mostrar_rec
+        rec = RECOMPENSAS[idx]
+        clase = "reward-box-empty" if rec["tipo"] == "none" else "reward-box-prize"
+        st.markdown(f"<div class='{clase}'><h1>🚪 PUERTA {idx+1}</h1><p>{MENSAJES[idx]}</p></div>", unsafe_allow_html=True)
         if not st.session_state.reclamado:
-            if st.button("💰 RECLAMAR RECOMPENSA"): st.session_state.reclamado = True; st.rerun()
+            if st.button("💰 RECLAMAR"): st.session_state.reclamado = True; st.rerun()
         else:
-            rec = RECOMPENSAS[idx]
-            if rec["tipo"] == "video":
-                if os.path.exists(rec["contenido"]): st.video(rec["contenido"])
-                else: st.error("Video no encontrado.")
+            if rec["tipo"] == "video": st.video(rec["contenido"]) if os.path.exists(rec["contenido"]) else st.error("Video missing")
             elif rec["tipo"] == "imagen":
-                b64_img = get_base64_of_bin_file(rec["contenido"])
-                if b64_img: st.markdown(f'<img src=\"data:image/png;base64,{b64_img}\" style=\"width:100%; border-radius:10px;\">', unsafe_allow_html=True)
-                else: st.error("Imagen no encontrada.")
-            else: st.markdown(f"<div style='border:1px dashed #d4af37; padding:10px;'>{rec['contenido']}</div>", unsafe_allow_html=True)
-        if st.button("✖ SALIR"): st.session_state.mostrar_recompensa = -1; st.session_state.reclamado = False; st.rerun()
+                img = get_base64(rec["contenido"])
+                if img: st.markdown(f'<img src="data:image/jpeg;base64,{img}" style="width:100%; border-radius:10px;">', unsafe_allow_html=True)
+                else: st.error(f"Falta {rec['contenido']}")
+            else: st.info(rec["contenido"])
+        if st.button("✖ SALIR"): st.session_state.mostrar_rec = -1; st.session_state.reclamado = False; st.rerun()
     else:
-        st.title(f"🏰 BIENVENIDA, {st.session_state.usuario.upper()}")
-        if all(st.session_state.puertas): st.balloons(); st.success("¡LO LOGRASTE!")
+        st.title(f"🏰 {st.session_state.usuario.upper()}")
         cols = st.columns(2)
-        for i, abierta in enumerate(st.session_state.puertas):
-            with cols[i % 2]:
-                st.metric(label=f"Puerta {i+1}", value="LISTO ✨" if abierta else "CERRADA 🔒")
-                if abierta and st.button(f"🎁 Ver {i+1}", key=f"v_{i}"): st.session_state.mostrar_recompensa = i; st.session_state.reclamado = True; st.rerun()
-        clave = st.text_input("¿¡Cuál es la llave!?", key="input_clave")
+        for i, ok in enumerate(st.session_state.puertas):
+            with cols[i%2]:
+                st.metric(f"Puerta {i+1}", "OK ✨" if ok else "LOCK 🔒")
+                if ok and st.button(f"Ver {i+1}", key=f"v{i}"): st.session_state.mostrar_rec = i; st.session_state.reclamado = True; st.rerun()
+        clave = st.text_input("Clave:")
         if st.button("Abrir"):
-            n = normalizar(clave); h = hashlib.sha256((SALT + n).encode()).hexdigest()
-            encontrada = False
+            h = hashlib.sha256((SALT+normalizar(clave)).encode()).hexdigest()
             for i in range(10):
                 if not st.session_state.puertas[i] and h == HASHES[i]:
-                    st.session_state.puertas[i] = True; st.session_state.mostrar_recompensa = i
-                    guardar_progreso(st.session_state.usuario, st.session_state.puertas)
-                    notificar(f"🏰 {st.session_state.usuario} abrió la Puerta {i+1}")
-                    encontrada = True; st.rerun()
-            if not encontrada:
-                notificar(f"❌ {st.session_state.usuario} falló con: {clave}")
-                st.error("Incorrecto")
+                    st.session_state.puertas[i] = True; st.session_state.mostrar_rec = i
+                    json.dump(st.session_state.puertas, open(obtener_ruta(st.session_state.usuario), "w"))
+                    notificar(f"🏰 {st.session_state.usuario} abrió {i+1}"); st.rerun()
+            st.error("Error")
