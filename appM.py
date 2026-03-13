@@ -25,15 +25,15 @@ if "mostrar_rec" not in st.session_state:
     st.session_state.mostrar_rec = -1
 
 RECOMPENSAS = [
-    {"tipo": "video", "contenido": "ima/Bala_la_la.mp4"},
+    {"tipo": "texto", "contenido": "📜 obtuviste un chocolate🍫 envia este codigo: A20r12"},
     {"tipo": "texto", "contenido": "📜 te ganaste unos chicles: S8o9IS"},
     {"tipo": "none", "contenido": "💨 Una brisa suave🍃"},
     {"tipo": "texto", "contenido": "📜 puedes obtener pista: H3LP M3"},
     {"tipo": "none", "contenido": "se apago la vela🕯️, suerte para la proxima"},
     {"tipo": "imagen", "contenido": "ima/Inui.jpg"},
     {"tipo": "none", "contenido": "Aqui solo hay telarañas🕸️ y arañas🕷️."},
-    {"tipo": "texto", "contenido": "📜 puedes pedri un chocolate🍫"},
-    {"tipo": "texto", "contenido": "📜 Te ganaste otrs chicle: r4h83gh"},
+    {"tipo": "video", "contenido": "ima/Bala_la_la.mp4"},
+    {"tipo": "texto", "contenido": "📜 Te ganaste otros chicles: r4h83gh"},
     {"tipo": "imagen", "contenido": "ima/Invi.jpg"}
 ]
 
@@ -153,13 +153,13 @@ else:
                 if img: st.markdown(f'<img src="data:image/jpeg;base64,{img}" style="width:100%; border-radius:10px;">', unsafe_allow_html=True)
                 else: st.error(f"Falta {rec['contenido']}")
             else: st.info(rec["contenido"])
-        if st.button("✖ SALIR"): st.session_state.mostrar_rec = -1; st.session_state.reclamado = False; st.rerun()
+        if st.button("❌ SALIR"): st.session_state.mostrar_rec = -1; st.session_state.reclamado = False; st.rerun()
     else:
         st.title(f"🏰 {st.session_state.usuario.upper()}")
         cols = st.columns(2)
         for i, ok in enumerate(st.session_state.puertas):
             with cols[i%2]:
-                st.metric(f"Puerta {i+1}", "OK ✨" if ok else "LOCK 🔒")
+                st.metric(f"Puerta {i+1}", "Abierta ✨" if ok else "LOCK 🔒")
                 if ok and st.button(f"Ver {i+1}", key=f"v{i}"): st.session_state.mostrar_rec = i; st.session_state.reclamado = True; st.rerun()
         clave = st.text_input("Clave:")
         if st.button("Abrir"):
