@@ -143,7 +143,11 @@ else:
         if not st.session_state.reclamado:
             if st.button("💰 RECLAMAR"): st.session_state.reclamado = True; st.rerun()
         else:
-            if rec["tipo"] == "video": st.video(rec["contenido"]) if os.path.exists(rec["contenido"]) else st.error("Video missing")
+            if rec["tipo"] == "video":
+                if os.path.exists(rec["contenido"]):
+                    st.video(rec["contenido"])
+                else:
+                    st.error("Video no encontrado en el servidor.")
             elif rec["tipo"] == "imagen":
                 img = get_base64(rec["contenido"])
                 if img: st.markdown(f'<img src="data:image/jpeg;base64,{img}" style="width:100%; border-radius:10px;">', unsafe_allow_html=True)
@@ -160,9 +164,13 @@ else:
         clave = st.text_input("Clave:")
         if st.button("Abrir"):
             h = hashlib.sha256((SALT+normalizar(clave)).encode()).hexdigest()
+            encontrada = False
             for i in range(10):
                 if not st.session_state.puertas[i] and h == HASHES[i]:
                     st.session_state.puertas[i] = True; st.session_state.mostrar_rec = i
                     json.dump(st.session_state.puertas, open(obtener_ruta(st.session_state.usuario), "w"))
-                    notificar(f"🏰 {st.session_state.usuario} abrió {i+1}"); st.rerun()
+                    notificar(f"🏰 {st.session_state.usuario} abrió puerta {i+1}"); st.rerun()
+                    encontrada = true; st.rerum
+            if not encontrada:
+                notificar(f"❌ {st.session_state.usuario} falló con: {clave}")
             st.error("Error")
