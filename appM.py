@@ -128,8 +128,21 @@ else:
         if all(st.session_state.puertas): st.balloons(); st.success("¡LO LOGRASTE!")
         cols = st.columns(2)
         for i, abierta in enumerate(st.session_state.puertas):
-            with cols[i % 2]:
-                st.metric(label=f"Puerta {i+1}", value="LISTO ✨" if abierta else "CERRADA 🔒")
+    with ccols = st.columns(2)
+
+for i, abierta in enumerate(st.session_state.puertas):
+    with cols[i % 2]:
+
+        st.metric(
+            label=f"Puerta {i+1}",
+            value="LISTO ✨" if abierta else "CERRADA 🔒"
+        )
+
+        if abierta:
+            if st.button(f"🎁 Ver recompensa {i+1}", key=f"ver_{i}"):
+                st.session_state.mostrar_recompensa = i
+                st.session_state.reclamado = True
+                st.rerun()
         clave = st.text_input("¿Cuál es la llave?", key="input_clave")
         if st.button("Abrir"):
             n = normalizar(clave)
