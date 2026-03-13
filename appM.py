@@ -49,7 +49,19 @@ TOKEN = "8798116628:AAGWyZmKj3SUyb0Eux1_uWYbPgVDpDtrShI"
 CHAT_ID = 7177023901
 SALT = "kCiyNtw4VH9RhI9t"
 HASHES = ["c88fb2d67a9e16ea2d36d4526cba48c0c08a337bafc7c5e851ec16883f03dbb3", "be56a7feb47e0996c71cc9ebe8fc2b1c99340e4911dfa7b0e3131bb36c10eeb9", "df415e7b7c62c85bc9dd3578f73eebc5c44c4d488d067ce2cc6345d457096bf4", "89121310a34aec298d2d35e9b2d6f11fd6cf620300ee8813a733dae477f4935a", "98a69fdd719b9a5500d8bdcfe965cc18e566c7e26dfb3f631c67dce657b02ae7", "63706a2b1ade3088d19a2ee5b92b173c372c5b04a54928d68390881dbd447f4b", "606088e02b3b65cceedb34d7fe960b409c910ee5452505e16ff25072f832d58b", "7419baafe64f43b3e14d8e0068c2048855f7b5b5209cfa9cb36c9756e34469c4", "966099cd834ed37eb03aeeede0688c19d0546b42f0e48bb1b09a3714fe9e47ae", "8839c479607aed6292190ab7dc1e5bc70009c6c189550e28563ad1ed19046173"]
-MENSAJES = ["Bala la, la, la...", "Te contare una historia...", "Maitsev...", "Santa clara...", "Filosofa...", "Podcast...", "70%...", "Bajo del mar...", "Difícil...", "Trucha!"]
+MENSAJES =[
+"Bala la, la, la, ¡muy bien! primera puerta, tienes el 10%. Podrás con el resto🤔?",
+"Te contare una historia... pero aun falta, llevas un 20% Si se puede! Si se puede!",
+"Maitsev. Sul on 30%😲",
+"Que sabia era santa clara, ¿no? vas un 40%🥳",
+"Que buena respuesta😑, jajajajaja. Toda una filosofa usted. vas por la mitad 🎉 que veloz",
+"Sea usted bienvenida al podcast, ay! cuantas risas nos trajo esas sesiones de grabación, ¿verdad?. vas por el 60%",
+"¡Hola! Ya tienes un 70%, ya casi🤩",
+"🎶Bajo del mar, bajo del mar🎶🦀. ya tenemos un 80%",
+"Este debía de ser más difícil😼, o creíste que todas serian color de rosa, no, no, no🙂‍↔️. Ya casi terminas un ultimo esfuerzo💪🏻!",
+"¿¡Enserio lo recordaste😶!?"
+]
+FINAL = "¡Lo Lograste!🎉🥳🎉, muy biennnnnn"
 
 RECOMPENSAS = [
     {"tipo": "video", "contenido": "ima/Bala_la_la.mp4"},
