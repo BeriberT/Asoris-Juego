@@ -27,8 +27,9 @@ st.markdown(f"""
 
 .main {{ 
 background: rgba(11, 13, 23, 0.8);
-color: #e0d5b0;
+color: #ffd700;
 font-family: 'VT323', monospace;
+font-weight: bold;
 padding: 20px;
 border-radius: 15px;
 }}
