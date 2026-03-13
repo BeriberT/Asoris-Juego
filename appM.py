@@ -25,16 +25,16 @@ if "mostrar_rec" not in st.session_state:
     st.session_state.mostrar_rec = -1
 
 RECOMPENSAS = [
-    {"tipo": "texto", "contenido": "📜 obtuviste un chocolate🍫 envia este codigo: A20r12"},
-    {"tipo": "texto", "contenido": "📜 te ganaste unos chicles: S8o9IS"},
-    {"tipo": "none", "contenido": "💨 Una brisa suave🍃"},
-    {"tipo": "texto", "contenido": "📜 puedes obtener pista: H3LP M3"},
-    {"tipo": "none", "contenido": "se apago la vela🕯️, suerte para la proxima"},
-    {"tipo": "imagen", "contenido": "ima/Inui.jpg"},
-    {"tipo": "none", "contenido": "Aqui solo hay telarañas🕸️ y arañas🕷️."},
-    {"tipo": "video", "contenido": "ima/Bala_la_la.mp4"},
-    {"tipo": "texto", "contenido": "📜 Te ganaste otros chicles: r4h83gh"},
-    {"tipo": "imagen", "contenido": "ima/Invi.jpg"}
+    {"tipo": "texto", "contenido": "📜 obtuviste un chocolate🍫 envia este codigo: A20r12"},  
+    {"tipo": "texto", "contenido": "📜 te ganaste unos chicles: S8o9IS"},                      
+    {"tipo": "none", "contenido": "💨 Una brisa suave🍃"},                                     
+    {"tipo": "texto", "contenido": "📜 puedes obtener pista: H3LP M3"},                        
+    {"tipo": "none", "contenido": "se apago la vela🕯️, suerte para la proxima"},               
+    {"tipo": "imagen", "contenido": "ima/Inui.jpg"},                                            
+    {"tipo": "none", "contenido": "Aqui solo hay telarañas🕸️ y arañas🕷️."},                    
+    {"tipo": "texto", "contenido": "📜 Te ganaste otros chicles: r4h83gh"},                     
+    {"tipo": "video", "contenido": "ima/Bala_la_la.mp4"},                                       
+    {"tipo": "imagen", "contenido": "ima/Invi.jpg"}                                             
 ]
 
 # Determinar qué imagen usar como fondo total
