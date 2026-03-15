@@ -12,14 +12,14 @@ def get_base64(bin_file):
         data = f.read()
     return base64.b64encode(data).decode()
 
-# --- ESCENARIOS ---
+# --- ESCENARIOS (Rutas actualizadas a carpeta 'ima') ---
 escenarios = [
-    {"nombre": "Torre", "imagen": "Torre.jpg"},
-    {"nombre": "Cocina", "imagen": "cocina.png"},
-    {"nombre": "Comedor", "imagen": "comedor.png"},
-    {"nombre": "Biblioteca", "imagen": "biblioteca.png"},
-    {"nombre": "Sala del Tesoro", "imagen": "sala del tesoro.png"},
-    {"nombre": "Observatorio", "imagen": "observatorio.png"}
+    {"nombre": "Torre", "imagen": "ima/Torre.jpg"},
+    {"nombre": "Cocina", "imagen": "ima/cocina.png"},
+    {"nombre": "Comedor", "imagen": "ima/comedor.png"},
+    {"nombre": "Biblioteca", "imagen": "ima/biblioteca.png"},
+    {"nombre": "Sala del Tesoro", "imagen": "ima/sala del tesoro.png"},
+    {"nombre": "Observatorio", "imagen": "ima/observatorio.png"}
 ]
 
 # --- ESTADO ---
@@ -54,11 +54,11 @@ if os.path.exists(img_escenario):
     """
 st.markdown(bg_style, unsafe_allow_html=True)
 
-# --- SELECCIÓN ---
+# --- SELECCIÓN (Rutas actualizadas a carpeta 'ima') ---
 if st.session_state.room_index == 0:
     st.session_state.player_name = st.text_input("Nombre:", value=st.session_state.player_name)
 
-personajes = {"Princesa": "F_04.png", "Mago": "aM_02.png"}
+personajes = {"Princesa": "ima/F_04.png", "Mago": "ima/aM_02.png"}
 hero_choice = st.selectbox("Héroe:", list(personajes.keys()))
 IMG_HERO = personajes[hero_choice]
 
