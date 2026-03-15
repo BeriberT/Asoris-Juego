@@ -1,75 +1,92 @@
 import streamlit as st
 import numpy as np
 import os
+import base64
 
 # --- CONFIGURACIÓN ---
 st.set_page_config(page_title="Aventura en la Torre", layout="centered")
 
-# --- ORDEN DE LOS ESCENARIOS ---
-escenarios = ["Torre", "Cocina", "Comedor", "Biblioteca", "Sala del Tesoro", "Observatorio"]
+# --- FUNCIÓN PARA CARGAR IMAGEN DE FONDO ---
+def get_base64(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
 
-# --- ESTADO DEL JUEGO ---
+# --- ESCENARIOS ---
+escenarios = [
+    {"nombre": "Torre", "imagen": "Torre.jpg"},
+    {"nombre": "Cocina", "imagen": "cocina.png"},
+    {"nombre": "Comedor", "imagen": "comedor.png"},
+    {"nombre": "Biblioteca", "imagen": "biblioteca.png"},
+    {"nombre": "Sala del Tesoro", "imagen": "sala del tesoro.png"},
+    {"nombre": "Observatorio", "imagen": "observatorio.png"}
+]
+
+# --- ESTADO ---
 if 'room_index' not in st.session_state:
     st.session_state.room_index = 0
 if 'player_pos' not in st.session_state:
-    st.session_state.player_pos = [1, 1]
+    st.session_state.player_pos = [4, 4]
 if 'direction' not in st.session_state:
     st.session_state.direction = "derecha"
 if 'player_name' not in st.session_state:
     st.session_state.player_name = ""
 
-room_actual = escenarios[st.session_state.room_index]
+room_actual = escenarios[st.session_state.room_index]["nombre"]
+img_escenario = escenarios[st.session_state.room_index]["imagen"]
+
 st.title(f"🏰 {room_actual}")
 
-# --- ESTILO CSS ---
-st.markdown("""
+# --- ESTILO CSS PARA EL FONDO Y ESPEJO ---
+bg_style = ""
+if os.path.exists(img_escenario):
+    bin_str = get_base64(img_escenario)
+    bg_style = f"""
     <style>
-    .mirror-img img { transform: scaleX(-1); display: inline-block; }
+    .stMain {{ 
+        background-image: url(\"data:image/png;base64,{bin_str}\");
+        background-size: cover;
+        background-position: center;
+    }}
+    .mirror-img img {{ transform: scaleX(-1); }}
+    .game-cell {{ height: 50px; display: flex; align-items: center; justify-content: center; }}
     </style>
-""", unsafe_allow_html=True)
+    """
+st.markdown(bg_style, unsafe_allow_html=True)
 
-# --- DATOS E IDENTIDAD ---
+# --- SELECCIÓN ---
 if st.session_state.room_index == 0:
-    st.session_state.player_name = st.text_input("¿Cómo te llamas?", value=st.session_state.player_name)
+    st.session_state.player_name = st.text_input("Nombre:", value=st.session_state.player_name)
 
-personajes = {
-    "Princesa (F_04)": "F_04.png", "Princesa (aF_04)": "aF_04.png", "Mago (aM_02)": "aM_02.png", "Mago (aM_05)": "aM_05.png"
-}
+personajes = {"Princesa": "F_04.png", "Mago": "aM_02.png"}
 hero_choice = st.selectbox("Héroe:", list(personajes.keys()))
 IMG_HERO = personajes[hero_choice]
 
-# --- MAPA (8x8) ---
-tower_map = np.zeros((8, 8))
-tower_map[0,:] = 1; tower_map[-1,:] = 1; tower_map[:,0] = 1; tower_map[:,-1] = 1
-tower_map[6, 6] = 2 # Meta
-
-# --- LÓGICA DE MOVIMIENTO ---
+# --- MOVIMIENTO ---
 def move_player(dr, dc):
-    new_r = st.session_state.player_pos[0] + dr
-    new_c = st.session_state.player_pos[1] + dc
-    if dc > 0: st.session_state.direction = "derecha"
-    elif dc < 0: st.session_state.direction = "izquierda"
-    
-    if 0 <= new_r < 8 and 0 <= new_c < 8:
-        if tower_map[new_r, new_c] != 1:
-            st.session_state.player_pos = [new_r, new_c]
+    nr, nc = st.session_state.player_pos[0] + dr, st.session_state.player_pos[1] + dc
+    if 0 <= nr < 8 and 0 <= nc < 8:
+        if dc > 0: st.session_state.direction = "derecha"
+        elif dc < 0: st.session_state.direction = "izquierda"
+        st.session_state.player_pos = [nr, nc]
 
-# --- RENDERIZADO ---
+# --- RENDERIZADO SOBRE EL FONDO ---
 for r in range(8):
     cols = st.columns(8)
     for c in range(8):
         with cols[c]:
+            st.markdown('<div class="game-cell">', unsafe_allow_html=True)
             if [r, c] == st.session_state.player_pos:
                 if os.path.exists(IMG_HERO):
                     if st.session_state.direction == "izquierda":
                         st.markdown('<div class="mirror-img">', unsafe_allow_html=True)
-                        st.image(IMG_HERO, use_container_width=True)
+                        st.image(IMG_HERO, width=40)
                         st.markdown('</div>', unsafe_allow_html=True)
-                    else: st.image(IMG_HERO, use_container_width=True)
+                    else: st.image(IMG_HERO, width=40)
                 else: st.write("👸")
-            elif tower_map[r, c] == 1: st.write("⬛")
-            elif tower_map[r, c] == 2: st.write("🚪")
-            else: st.write("⬜")
+            elif r == 7 and c == 7: st.write("🚪")
+            else: st.write("")
+            st.markdown('</div>', unsafe_allow_html=True)
 
 # --- CONTROLES ---
 st.write("---")
@@ -79,13 +96,10 @@ with c1: st.button("◀️", on_click=move_player, args=(0, -1))
 with c3: st.button("▶️", on_click=move_player, args=(0, 1))
 with c2: st.button("🔽", on_click=move_player, args=(1, 0))
 
-# --- CAMBIO DE NIVEL ---
-if st.session_state.player_pos == [6, 6]:
+if st.session_state.player_pos == [7, 7]:
     if st.session_state.room_index < len(escenarios) - 1:
-        if st.button(f"Ir a la {escenarios[st.session_state.room_index+1]}"):
+        if st.button("Siguiente Sala"):
             st.session_state.room_index += 1
             st.session_state.player_pos = [1, 1]
             st.rerun()
-    else:
-        st.balloons()
-        st.success(f"¡Increíble {st.session_state.player_name}! Completaste el Observatorio final.")
+    else: st.success("¡Victoria!")
